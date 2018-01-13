@@ -57,9 +57,11 @@ object SunshineSyncTask {
                     .subscribe(
                             { result ->
                                 Log.d("TAG", "Downloaded weather")
-                                //Forecast().deleteAll()
                                 val realm = Realm.getDefaultInstance()
-                                realm.executeTransactionAsync { it.insertOrUpdate(result)}
+                                realm.executeTransactionAsync {
+                                    it.deleteAll()
+                                    it.insertOrUpdate(result)
+                                }
 
                                 val notificationsEnabled = SunshinePreferences
                                         .areNotificationsEnabled(context)
@@ -72,14 +74,14 @@ object SunshineSyncTask {
                                     oneDayPassedSinceLastNotification = true
                                 }
                                 if (notificationsEnabled && oneDayPassedSinceLastNotification) {
-                                    NotificationUtils.notifyUserOfNewWeather(context)
+                                    NotificationUtils.notifyUserOfNewWeather(context,result?.data?.elementAt(0))
                                 }
                             },
                             { error -> error.printStackTrace() }
                     )
             )
 
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             /* Server probably invalid */
             e.printStackTrace()
         }

@@ -1,7 +1,17 @@
 package com.example.android.sunshine.utilities
 
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
+import android.graphics.BitmapFactory
+import android.support.v4.app.NotificationCompat
+import android.support.v4.app.TaskStackBuilder
+import android.support.v4.content.ContextCompat
+import com.example.android.sunshine.DetailActivity
 import com.example.android.sunshine.R
+import com.example.android.sunshine.data.Data
+import com.example.android.sunshine.data.SunshinePreferences
 
 object NotificationUtils {
 
@@ -30,31 +40,17 @@ object NotificationUtils {
      *
      * @param context Context used to query our ContentProvider and use various Utility methods
      */
-    fun notifyUserOfNewWeather(context: Context) {
-
-        /* Build the URI for today's weather in order to show up to date data in notification */
-        /*val todaysWeatherUri = WeatherContract.WeatherEntry
-                .buildWeatherUriWithDate(SunshineDateUtils.normalizeDate(System.currentTimeMillis()))
-
-        /*
-         * The MAIN_FORECAST_PROJECTION array passed in as the second parameter is defined in our WeatherContract
-         * class and is used to limit the columns returned in our cursor.
-         */
-        val todayWeatherCursor = context.contentResolver.query(
-                todaysWeatherUri,
-                WEATHER_NOTIFICATION_PROJECTION,
-                null, null, null)
-
+    fun notifyUserOfNewWeather(context: Context, day: Data?) {
         /*
          * If todayWeatherCursor is empty, moveToFirst will return false. If our cursor is not
          * empty, we want to show the notification.
          */
-        if (todayWeatherCursor!!.moveToFirst()) {
+        if (day != null) {
 
             /* Weather ID as returned by API, used to identify the icon to be used */
-            val weatherId = todayWeatherCursor.getInt(INDEX_WEATHER_ID)
-            val high = todayWeatherCursor.getDouble(INDEX_MAX_TEMP)
-            val low = todayWeatherCursor.getDouble(INDEX_MIN_TEMP)
+            val weatherId = day.weather?.code?.toInt()
+            val high = day.max_temp
+            val low = day.min_temp
 
             val resources = context.resources
             val largeArtResourceId = SunshineWeatherUtils
@@ -92,7 +88,7 @@ object NotificationUtils {
              * we want to open Sunshine to the DetailActivity to display the newly updated weather.
              */
             val detailIntentForToday = Intent(context, DetailActivity::class.java)
-            detailIntentForToday.data = todaysWeatherUri
+            detailIntentForToday.putExtra("date",day.datetime)
 
             val taskStackBuilder = TaskStackBuilder.create(context)
             taskStackBuilder.addNextIntentWithParentStack(detailIntentForToday)
@@ -112,9 +108,6 @@ object NotificationUtils {
              */
             SunshinePreferences.saveLastNotificationTime(context, System.currentTimeMillis())
         }
-
-        /* Always close your cursor when you're done with it to avoid wasting resources. */
-        todayWeatherCursor.close()*/
     }
 
     /**
@@ -134,7 +127,7 @@ object NotificationUtils {
      * @param low       Low temperature (either celsius or fahrenheit depending on preferences)
      * @return Summary of a particular day's forecast
      */
-    private fun getNotificationText(context: Context, weatherId: Int, high: Double, low: Double): String {
+    private fun getNotificationText(context: Context, weatherId: Int?, high: Double, low: Double): String {
 
         /*
          * Short description of the weather, as provided by the API.

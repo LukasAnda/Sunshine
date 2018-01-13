@@ -27,11 +27,7 @@ class SunshineSyncIntentService : IntentService("SunshineSyncIntentService") {
     private val compositeDisposable:CompositeDisposable = CompositeDisposable()
 
     override fun onHandleIntent(intent: Intent?) {
-        SunshineSyncTask.syncWeather(this, compositeDisposable)
+        SunshineSyncTask.syncWeather(this, CompositeDisposable())
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        compositeDisposable.clear()
-    }
 }
