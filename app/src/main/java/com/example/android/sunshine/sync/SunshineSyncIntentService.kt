@@ -24,8 +24,14 @@ import io.reactivex.disposables.CompositeDisposable
  * a service on a separate handler thread.
  */
 class SunshineSyncIntentService : IntentService("SunshineSyncIntentService") {
+    private val compositeDisposable:CompositeDisposable = CompositeDisposable()
 
     override fun onHandleIntent(intent: Intent?) {
-        SunshineSyncTask.syncWeather(this, CompositeDisposable())
+        SunshineSyncTask.syncWeather(this, compositeDisposable)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        compositeDisposable.clear()
     }
 }
