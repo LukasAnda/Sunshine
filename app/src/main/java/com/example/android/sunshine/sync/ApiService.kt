@@ -1,5 +1,6 @@
 package com.example.android.sunshine.sync
 
+import com.example.android.sunshine.BuildConfig
 import com.example.android.sunshine.data.Forecast
 
 /**
@@ -10,7 +11,7 @@ interface ApiService {
     @retrofit2.http.GET("forecast/daily")
     fun getWeatherLatLon(@retrofit2.http.Query(LAT_PARAM) lat: String,
                          @retrofit2.http.Query(LON_PARAM) lon: String,
-                         @retrofit2.http.Query("key") days: String = "31fc63cb95f845f399af85ecb3dcdf91"):
+                         @retrofit2.http.Query("key") days: String = BuildConfig.OPEN_WEATHER_MAP_API_KEY):
             io.reactivex.Observable<Forecast>
     companion object Factory {
         private val FORECAST_BASE_URL = "https://api.weatherbit.io/v2.0/"

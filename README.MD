@@ -7,3 +7,4 @@ For instance, I've swapped the original weather API for the Weatherbit one, when
 insert your own API key there. Then I've removed the content provider and replaced it with Realm 
 database. And lastly, I've put all the networking into Retrofit for easy maintenance and scalability.
 
+For your own implementation, create a gradle.properties file, put a variable `MyOpenWeatherMapApiKey="YourKeyHere"` there and it should work fine :)
