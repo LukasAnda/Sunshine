@@ -50,11 +50,13 @@ class DetailActivity : AppCompatActivity() {
         mDate = intent.getStringExtra("date")
         realm = Realm.getDefaultInstance()
         day = realm.where(Data::class.java).equalTo("datetime",mDate).findFirst()
-        if(day != null) bindData()
+        day?.let {
+            bindData()
+        }
         /* This connects our Activity into the loader lifecycle. */
     }
 
-    fun bindData(){
+    private fun bindData(){
         val weatherId = day?.weather?.code?.toInt()
         /* Use our utility method to determine the resource ID for the proper art */
         val weatherImageId = SunshineWeatherUtils.getLargeArtResourceIdForWeatherCondition(weatherId)
@@ -79,7 +81,7 @@ class DetailActivity : AppCompatActivity() {
         val jodaDate = formatter.parseDateTime(date)
         val dateText = jodaDate.toString("EEEE, MMMMM dd")
 
-        primaryInfo.date.setText(dateText)
+        primaryInfo.date.text = dateText
 
         /***********************
          * Weather Description *
@@ -91,11 +93,11 @@ class DetailActivity : AppCompatActivity() {
         val descriptionA11y = getString(R.string.a11y_forecast, description)
 
         /* Set the text and content description (for accessibility purposes) */
-        primaryInfo.weatherDescription.setText(description)
-        primaryInfo.weatherDescription.setContentDescription(descriptionA11y)
+        primaryInfo.weatherDescription.text = description
+        primaryInfo.weatherDescription.contentDescription = descriptionA11y
 
         /* Set the content description on the weather image (for accessibility purposes) */
-        primaryInfo.weatherIcon.setContentDescription(descriptionA11y)
+        primaryInfo.weatherIcon.contentDescription = descriptionA11y
 
         /**************************
          * High (max) temperature *
@@ -113,8 +115,8 @@ class DetailActivity : AppCompatActivity() {
         val highA11y = getString(R.string.a11y_high_temp, highString)
 
         /* Set the text and content description (for accessibility purposes) */
-        primaryInfo.highTemperature.setText(highString)
-        primaryInfo.highTemperature.setContentDescription(highA11y)
+        primaryInfo.highTemperature.text = highString
+        primaryInfo.highTemperature.contentDescription = highA11y
 
         /*************************
          * Low (min) temperature *
@@ -131,8 +133,8 @@ class DetailActivity : AppCompatActivity() {
         val lowA11y = getString(R.string.a11y_low_temp, lowString)
 
         /* Set the text and content description (for accessibility purposes) */
-        primaryInfo.lowTemperature.setText(lowString)
-        primaryInfo.lowTemperature.setContentDescription(lowA11y)
+        primaryInfo.lowTemperature.text = lowString
+        primaryInfo.lowTemperature.contentDescription = lowA11y
 
         /************
          * Humidity *
@@ -144,10 +146,10 @@ class DetailActivity : AppCompatActivity() {
         val humidityA11y = getString(R.string.a11y_humidity, humidityString)
 
         /* Set the text and content description (for accessibility purposes) */
-        extraDetails.humidity.setText(humidityString)
-        extraDetails.humidity.setContentDescription(humidityA11y)
+        extraDetails.humidity.text = humidityString
+        extraDetails.humidity.contentDescription = humidityA11y
 
-        extraDetails.humidityLabel.setContentDescription(humidityA11y)
+        extraDetails.humidityLabel.contentDescription = humidityA11y
 
         /****************************
          * Wind speed and direction *
@@ -160,10 +162,10 @@ class DetailActivity : AppCompatActivity() {
         val windA11y = getString(R.string.a11y_wind, windString)
 
         /* Set the text and content description (for accessibility purposes) */
-        extraDetails.windMeasurement.setText(windString)
-        extraDetails.windMeasurement.setContentDescription(windA11y)
+        extraDetails.windMeasurement.text = windString
+        extraDetails.windMeasurement.contentDescription = windA11y
 
-        extraDetails.windLabel.setContentDescription(windA11y)
+        extraDetails.windLabel.contentDescription = windA11y
 
         /************
          * Pressure *
@@ -183,10 +185,10 @@ class DetailActivity : AppCompatActivity() {
         val pressureA11y = getString(R.string.a11y_pressure, pressureString)
 
         /* Set the text and content description (for accessibility purposes) */
-        extraDetails.pressure.setText(pressureString)
-        extraDetails.pressure.setContentDescription(pressureA11y)
+        extraDetails.pressure.text = pressureString
+        extraDetails.pressure.contentDescription = pressureA11y
 
-        extraDetails.pressureLabel.setContentDescription(pressureA11y)
+        extraDetails.pressureLabel.contentDescription = pressureA11y
 
         /* Store the forecast summary String in our forecast summary field to share later */
         mForecastSummary = String.format("%s - %s - %s/%s",
@@ -205,10 +207,9 @@ class DetailActivity : AppCompatActivity() {
      * @see .onOptionsItemSelected
      */
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        /* Use AppCompatActivity's method getMenuInflater to get a handle on the menu inflater */
-        val inflater = menuInflater
+        /* Use AppCompatActivity's menuInflater property to get a handle on the menu inflater */
         /* Use the inflater's inflate method to inflate our menu layout to this menu */
-        inflater.inflate(R.menu.detail, menu)
+        menuInflater.inflate(R.menu.detail, menu)
         /* Return true so that the menu is displayed in the Toolbar */
         return true
     }
