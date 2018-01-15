@@ -20,6 +20,7 @@ import android.content.Intent
 import com.example.android.sunshine.data.Data
 import com.firebase.jobdispatcher.*
 import io.realm.Realm
+import java.util.concurrent.TimeUnit
 
 object SunshineSyncUtils {
 
@@ -27,8 +28,8 @@ object SunshineSyncUtils {
      * Interval at which to sync with the weather. Use TimeUnit for convenience, rather than
      * writing out a bunch of multiplication ourselves and risk making a silly mistake.
      */
-    private val SYNC_INTERVAL_HOURS = 1
-    private val SYNC_INTERVAL_SECONDS = 60// TimeUnit.HOURS.toSeconds(SYNC_INTERVAL_HOURS.toLong()).toInt()
+    private val SYNC_INTERVAL_HOURS = 3
+    private val SYNC_INTERVAL_SECONDS = TimeUnit.HOURS.toSeconds(SYNC_INTERVAL_HOURS.toLong()).toInt()
     private val SYNC_FLEXTIME_SECONDS = SYNC_INTERVAL_SECONDS / 3
 
     private var sInitialized: Boolean = false
