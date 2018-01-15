@@ -10,6 +10,27 @@ import io.realm.annotations.RealmClass
  * Created by lukas on 1/11/2018.
  */
 @RealmClass
+open class Location(
+    @PrimaryKey
+    @SerializedName("id")
+    var id: Int = 0,
+    @SerializedName("city_name")
+    var city_name: String? = null,
+    @SerializedName("elevation")
+    var elevation: Int = 0,
+    @SerializedName("state_code")
+    var state_code: String? = null,
+    @SerializedName("state_name")
+    var state_name: String? = null,
+    @SerializedName("country_code")
+    var country_code: String? = null,
+    @SerializedName("country_name")
+    var country_name: String? = null
+
+):RealmObject()
+
+
+@RealmClass
 open class Forecast (
         @SerializedName("data")
     var data: RealmList<Data>? = null,

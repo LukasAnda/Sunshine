@@ -21,10 +21,14 @@ import android.util.Log
 import com.example.android.sunshine.data.Forecast
 import com.example.android.sunshine.data.SunshinePreferences
 import com.example.android.sunshine.utilities.NotificationUtils
+import com.google.android.gms.location.LocationCallback
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.realm.Realm
+
+
 
 object SunshineSyncTask {
 
@@ -36,12 +40,14 @@ object SunshineSyncTask {
      *
      * @param context Used to access utility methods and the ContentResolver
      */
+
+    var callback:LocationCallback? = null
     @Synchronized
     fun syncWeather(context: Context, compositeDisposable: CompositeDisposable) {
 
         try {
             val repository = GetWeatherProvider.provideWeatherProvider()
-            val func: io.reactivex.Observable<Forecast>
+            val func:Observable<Forecast>
             if (SunshinePreferences.isLocationLatLonAvailable(context)) {
                 val preferredCoordinates = SunshinePreferences.getLocationCoordinates(context)
                 val latitude = preferredCoordinates[0]
@@ -55,12 +61,12 @@ object SunshineSyncTask {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .subscribe(
-                            { result ->
+                            { resultt ->
                                 Log.d("TAG", "Downloaded weather")
                                 val realm = Realm.getDefaultInstance()
                                 realm.executeTransactionAsync {
                                     it.deleteAll()
-                                    it.insertOrUpdate(result)
+                                    it.insertOrUpdate(resultt)
                                 }
 
                                 val notificationsEnabled = SunshinePreferences
@@ -74,12 +80,39 @@ object SunshineSyncTask {
                                     oneDayPassedSinceLastNotification = true
                                 }
                                 if (notificationsEnabled && oneDayPassedSinceLastNotification) {
-                                    NotificationUtils.notifyUserOfNewWeather(context,result?.data?.elementAt(0))
+                                    NotificationUtils.notifyUserOfNewWeather(context, resultt?.data?.elementAt(0))
                                 }
                             },
                             { error -> error.printStackTrace() }
                     )
             )
+//            val client = LocationServices.getFusedLocationProviderClient(context)
+//            if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
+//                    != PackageManager.PERMISSION_GRANTED ||
+//                    ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)
+//                            != PackageManager.PERMISSION_GRANTED) {
+//                return
+//            }
+//            val locationRequest = LocationRequest()
+//            locationRequest.smallestDisplacement = 0f
+//            locationRequest.fastestInterval = 0
+//            locationRequest.interval = 0
+//            locationRequest.priority = com.google.android.gms.location.LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
+//            callback = object : LocationCallback() {
+//                override fun onLocationResult(result: LocationResult?) {
+//                    super.onLocationResult(result)
+//                    client.removeLocationUpdates(callback)
+//                    if (result != null) {
+//                        val func: io.reactivex.Observable<Forecast>
+//
+//                    }
+//                }
+//
+//                override fun onLocationAvailability(locationAvailability: LocationAvailability?) {
+//                    super.onLocationAvailability(locationAvailability)
+//                }
+//            }
+//            client.requestLocationUpdates(locationRequest, callback,null)
 
         } catch (e: Throwable) {
             /* Server probably invalid */

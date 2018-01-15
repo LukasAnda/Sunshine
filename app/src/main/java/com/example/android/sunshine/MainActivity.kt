@@ -26,6 +26,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import com.example.android.sunshine.data.Data
+import com.example.android.sunshine.data.Location
 import com.example.android.sunshine.data.SunshinePreferences
 import com.example.android.sunshine.sync.SunshineSyncUtils
 import io.realm.Realm
@@ -56,9 +57,13 @@ class MainActivity : AppCompatActivity(),  ForecastAdapter.ForecastAdapterOnClic
         mForecastAdapter = ForecastAdapter(this, this,d)
 
         recyclerView.adapter = mForecastAdapter
+        syncData()
+        Log.d(TAG,"Cities -> "+ realm.where(Location::class.java).findAll().size)
+    }
 
+
+    fun syncData(){
         SunshineSyncUtils.initialize(this)
-
     }
 
     override fun onResume() {
