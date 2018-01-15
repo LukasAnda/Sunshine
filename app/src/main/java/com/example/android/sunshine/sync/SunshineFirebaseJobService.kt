@@ -48,7 +48,7 @@ class SunshineFirebaseJobService : JobService() {
                 return null
             }
 
-            override fun onPostExecute(aVoid: Void) {
+            override fun onPostExecute(aVoid: Void?) {
                 jobFinished(jobParameters, false)
             }
         }
