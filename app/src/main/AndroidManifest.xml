@@ -16,13 +16,13 @@
 -->
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.android.sunshine">
+    package="com.lukasanda.android.sunshine">
 
     <!-- This permission is necessary in order for Sunshine to perform network access. -->
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
-        android:name=".Application"
+        android:name="com.lukasanda.android.sunshine.Application"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -31,7 +31,7 @@
 
         <!--The manifest entry for our MainActivity. Each Activity requires a manifest entry-->
         <activity
-            android:name=".MainActivity"
+            android:name="com.lukasanda.android.sunshine.MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:theme="@style/AppTheme.Forecast">
@@ -43,27 +43,27 @@
 
         <!--The manifest entry for our DetailActivity. Each Activity requires a manifest entry-->
         <activity
-            android:name=".DetailActivity"
+            android:name="com.lukasanda.android.sunshine.DetailActivity"
             android:label="@string/title_activity_detail"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName="com.lukasanda.android.sunshine.MainActivity"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity"/>
+                android:value="com.lukasanda.android.sunshine.MainActivity"/>
         </activity>
 
         <!--The manifest entry for our SettingsActivity. Each Activity requires a manifest entry-->
-        <activity android:name=".SettingsActivity"/>
-        <activity android:name=".LocationSelectActivity" />
+        <activity android:name="com.lukasanda.android.sunshine.SettingsActivity"/>
+        <activity android:name="com.lukasanda.android.sunshine.LocationSelectActivity" />
 
         <!--This is required for immediate syncs -->
         <service
-            android:name=".sync.SunshineSyncIntentService"
+            android:name="com.lukasanda.android.sunshine.sync.SunshineSyncIntentService"
             android:exported="false" />
 
         <!-- This is the Service declaration used in conjunction with FirebaseJobDispatcher -->
         <service
-            android:name=".sync.SunshineFirebaseJobService"
+            android:name="com.lukasanda.android.sunshine.sync.SunshineFirebaseJobService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE"/>

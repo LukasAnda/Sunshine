@@ -74,8 +74,9 @@
     <!-- Key name for storing location in SharedPreferences -->
     <string name="pref_location_key" translatable="false">location</string>
 
-    <!-- Default postal code for location preference -->
-    <string name="pref_location_default" translatable="false">Mountain View, CA 94043</string>
+    <!-- Default id of location -->
+    <string name="pref_location_default" translatable="false">5128581</string>
+
 
     <!-- Label for the temperature units preference -->
     <string name="pref_units_label">Temperature Units</string>
@@ -243,5 +244,6 @@
         High:<xliff:g id="high">%2$s</xliff:g>
         Low:<xliff:g id="low">%3$s</xliff:g>
     </string>
+    <string name="action_location">Location</string>
 
 </resources>

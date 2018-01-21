@@ -8,3 +8,5 @@ insert your own API key there. Then I've removed the content provider and replac
 database. And lastly, I've put all the networking into Retrofit for easy maintenance and scalability.
 
 For your own implementation, create a gradle.properties file, put a variable `MyOpenWeatherMapApiKey="YourKeyHere"` there and it should work fine :)
+
+To implement cities, there is a .json file. Create your own firebase project, replace the JSON genereated by firebase and import cities.json to firebase database
